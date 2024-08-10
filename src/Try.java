@@ -1,309 +1,237 @@
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Try {
 
-    private static JPanel mainPanel; // Reference to the main panel
-    private static JFrame frame; // Reference to the main frame
-    private static JButton loginButton; // Reference to the login/register button
-    private static JLabel customerIdLabel; // Reference to the customer ID label
-    private static JButton logoutButton; // Reference to the logout button
-    private static JLabel copyright; //Reference to the copyright label
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(Try::createAndShowGUI);
-    }
-
-    private static void createAndShowGUI() {
-        // Create the main frame
-        frame = new JFrame("Home Loan Application");
+    public static void showLoanApplicationPage() {
+        // Create the frame
+        JFrame frame = new JFrame("Loan Application Form");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 400);
-        frame.setLocationRelativeTo(null); // Center the window
+        frame.setSize(900, 700); // Adjust the size as needed
 
-        // Create the main panel
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(8, 1, 10, 10)); // 8 rows, 1 column with gaps
+        // Create panels for different sections
+        JPanel incomeDetailsPanel = createIncomeDetailsPanel();
+        JPanel loanDetailsPanel = createLoanDetailsPanel();
+        JPanel personalDetailsPanel = createPersonalDetailsPanel();
+        JPanel documentsPanel = createDocumentsPanel();
+        JPanel calculatePanel = createCalculatePanel();
 
-        // Create buttons for each option
-        loginButton = new JButton("Log in / Register");
-        JButton applyLoanButton = new JButton("Apply for a New Loan");
-        JButton checkStatusButton = new JButton("Check Loan Status");
-        JButton loanCalculatorButton = new JButton("Loan Calculator");
-        JButton aboutUsButton = new JButton("About Us");
-        JButton faqsButton = new JButton("FAQs");
-        JButton exitButton = new JButton("Exit");
-        JLabel copyright = new JLabel("Copyright 2024-25 LOAN / HOME", JLabel.CENTER);
+        // Combine all sections into the main panel
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5); // Padding
 
-        // Add buttons to the panel
-        
-        mainPanel.add(applyLoanButton);
-        mainPanel.add(checkStatusButton);
-        mainPanel.add(loanCalculatorButton);
-        mainPanel.add(aboutUsButton);
-        mainPanel.add(faqsButton);
-        mainPanel.add(exitButton);
-        mainPanel.add(loginButton);
-        mainPanel.add(copyright);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        mainPanel.add(incomeDetailsPanel, gbc);
 
-        // Add panel to frame
-        frame.add(mainPanel);
+        gbc.gridy++;
+        mainPanel.add(loanDetailsPanel, gbc);
 
-        // Button action listeners
-        loginButton.addActionListener(e -> LoginRegister.showLoginRegisterOptions());
-        applyLoanButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "You chose to Apply for a New Loan."));
-        checkStatusButton.addActionListener(e -> showCheckLoanStatusDialog());
-        loanCalculatorButton.addActionListener(e -> showLoanCalculatorOptions());
-        aboutUsButton.addActionListener(e -> AboutUs.showAboutUs());
-        faqsButton.addActionListener(e -> FAQs.showFAQs());
-        exitButton.addActionListener(e -> System.exit(0)); // Exit the application
+        gbc.gridy++;
+        mainPanel.add(calculatePanel, gbc);
 
-        // Set the frame to be visible
+        gbc.gridy++;
+        mainPanel.add(personalDetailsPanel, gbc);
+
+        gbc.gridy++;
+        mainPanel.add(documentsPanel, gbc);
+
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.CENTER;
+        JButton submitButton = new JButton("Submit");
+        mainPanel.add(submitButton, gbc);
+
+        // Add action listener to calculate button
+        addCalculateButtonListener(loanDetailsPanel);
+
+        // Add scroll pane for the main panel
+        JScrollPane scrollPane = new JScrollPane(mainPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        // Finalize the frame
+        frame.add(scrollPane);
         frame.setVisible(true);
     }
 
-    public static void updateMainPanelAfterLogin(String customerId) {
-        // Remove all components from the panel
-        mainPanel.removeAll();
+    private static JPanel createIncomeDetailsPanel() {
+        String[] employmentTypes = { "Salaried", "Self-Employed", "Freelancer", "Retired", "Unemployed" };
+        JComboBox<String> employmentTypeDropdown = new JComboBox<>(employmentTypes);
+        JTextField organizationField = new JTextField();
+        JTextField employerNameField = new JTextField();
+        JTextField monthlyIncomeField = new JTextField();
+        JTextField retirementAgeField = new JTextField();
 
-        // Create and add customer ID label
-        customerIdLabel = new JLabel("Customer ID: " + customerId, JLabel.CENTER);
-        mainPanel.add(customerIdLabel);
+        JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
+        panel.setBorder(BorderFactory.createTitledBorder("Income Details"));
+        panel.add(new JLabel("Employment Type:"));
+        panel.add(employmentTypeDropdown);
+        panel.add(new JLabel("Organization:"));
+        panel.add(organizationField);
+        panel.add(new JLabel("Employer Name:"));
+        panel.add(employerNameField);
+        panel.add(new JLabel("Monthly Income:"));
+        panel.add(monthlyIncomeField);
+        panel.add(new JLabel("Retirement Age:"));
+        panel.add(retirementAgeField);
 
-        // Create and add log out button
-        logoutButton = new JButton("Log Out");
-        logoutButton.addActionListener(e -> logout());
-        mainPanel.add(logoutButton);
-
-        // Re-add other buttons
-        JButton applyLoanButton = new JButton("Apply for a New Loan");
-        JButton checkStatusButton = new JButton("Check Loan Status");
-        JButton loanCalculatorButton = new JButton("Loan Calculator");
-        JButton aboutUsButton = new JButton("About Us");
-        JButton faqsButton = new JButton("FAQs");
-        JButton exitButton = new JButton("Exit");
-
-        mainPanel.add(applyLoanButton);
-        mainPanel.add(checkStatusButton);
-        mainPanel.add(loanCalculatorButton);
-        mainPanel.add(aboutUsButton);
-        mainPanel.add(faqsButton);
-        mainPanel.add(exitButton);
-
-        // Update the frame
-        frame.revalidate();
-        frame.repaint();
-    }
-    
-//    private static void showLoginRegisterOptions() {
-//        String[] options = {"Log In", "Register"};
-//        int choice = JOptionPane.showOptionDialog(null, "Please select an option:", "Log in / Register",
-//                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-//
-//        if (choice == 0) {
-//            showLoginDialog();
-//        } else if (choice == 1) {
-//            JOptionPane.showMessageDialog(null, "You chose Register.");
-//            // Add functionality for registering
-//        }
-//    }
-
-//    private static void showLoginDialog() {
-//        JPanel panel = new JPanel(new GridLayout(2, 2));
-//
-//        JTextField customerIdField = new JTextField();
-//        JPasswordField passwordField = new JPasswordField();
-//
-//        panel.add(new JLabel("Customer ID:"));
-//        panel.add(customerIdField);
-//        panel.add(new JLabel("Password:"));
-//        panel.add(passwordField);
-//
-//        int result = JOptionPane.showConfirmDialog(null, panel, "Log In", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-//
-//        if (result == JOptionPane.OK_OPTION) {
-//            String customerId = customerIdField.getText();
-//            String password = new String(passwordField.getPassword());
-//            login(customerId, password);
-//        }
-//    }
-
-//    private static void login(String customerId, String password) {
-//        // Placeholder for login validation
-//        JOptionPane.showMessageDialog(null, "Logged in successfully with Customer ID: " + customerId, "Login", JOptionPane.INFORMATION_MESSAGE);
-//        
-//        // Update the main panel to reflect the login
-//        updateMainPanelAfterLogin(customerId);
-//    }
-
-//    private static void updateMainPanelAfterLogin(String customerId) {
-//        // Remove all components from the panel
-//        mainPanel.removeAll();
-//
-//        // Create and add customer ID label
-//        customerIdLabel = new JLabel("Customer ID: " + customerId, JLabel.CENTER);
-//        mainPanel.add(customerIdLabel);
-//
-//        // Create and add log out button
-//        logoutButton = new JButton("Log Out");
-//        logoutButton.addActionListener(e -> logout());
-//        mainPanel.add(logoutButton);
-//
-//        // Re-add other buttons
-//        JButton applyLoanButton = new JButton("Apply for a New Loan");
-//        JButton checkStatusButton = new JButton("Check Loan Status");
-//        JButton loanCalculatorButton = new JButton("Loan Calculator");
-//        JButton aboutUsButton = new JButton("About Us");
-//        JButton faqsButton = new JButton("FAQs");
-//        JButton exitButton = new JButton("Exit");
-//
-//        mainPanel.add(applyLoanButton);
-//        mainPanel.add(checkStatusButton);
-//        mainPanel.add(loanCalculatorButton);
-//        mainPanel.add(aboutUsButton);
-//        mainPanel.add(faqsButton);
-//        mainPanel.add(exitButton);
-//
-//        // Update the frame
-//        frame.revalidate();
-//        frame.repaint();
-//    }
-
-    private static void logout() {
-        // Remove customer ID label and logout button
-        mainPanel.remove(customerIdLabel);
-        mainPanel.remove(logoutButton);
-
-        // Re-add the login/register button
-        mainPanel.add(loginButton);
-        JLabel copyright = new JLabel("Copyright 2024-25 LOAN / HOME", JLabel.CENTER);
-        mainPanel.add(copyright);
-
-        // Update the frame
-        frame.revalidate();
-        frame.repaint();
+        return panel;
     }
 
-    private static void showCheckLoanStatusDialog() {
-        JPanel panel = new JPanel(new GridLayout(2, 2));
+    private static JPanel createLoanDetailsPanel() {
+        JTextField applicationIdField = new JTextField(String.valueOf(generateApplicationId()));
+        applicationIdField.setEditable(false);
+        JTextField loanAmountField = new JTextField();
+        JTextField tenureField = new JTextField();
+        JTextField rateOfInterestField = new JTextField("8.5% p.a.");
+        rateOfInterestField.setEditable(false);
+        JTextField maxLoanAmountField = new JTextField();
+        maxLoanAmountField.setEditable(false);
+        JTextField emiField = new JTextField();
+        emiField.setEditable(false);
+        JTextField applicationStatusField = new JTextField("Pending");
+        applicationStatusField.setEditable(false);
+        JTextField submissionDateField = new JTextField(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        submissionDateField.setEditable(false);
 
-        JTextField applicationIdField = new JTextField();
-        JTextField dobField = new JTextField();
-
+        JPanel panel = new JPanel(new GridLayout(8, 2, 10, 10));
+        panel.setBorder(BorderFactory.createTitledBorder("Loan Details"));
         panel.add(new JLabel("Application ID:"));
         panel.add(applicationIdField);
-        panel.add(new JLabel("Date of Birth (YYYY-MM-DD):"));
+        panel.add(new JLabel("Loan Amount:"));
+        panel.add(loanAmountField);
+        panel.add(new JLabel("Tenure:"));
+        panel.add(tenureField);
+        panel.add(new JLabel("Rate of Interest:"));
+        panel.add(rateOfInterestField);
+        panel.add(new JLabel("Application Status:"));
+        panel.add(applicationStatusField);
+        panel.add(new JLabel("Submission Date:"));
+        panel.add(submissionDateField);
+        panel.add(new JLabel("Max Loan Amount:"));
+        panel.add(maxLoanAmountField);
+        panel.add(new JLabel("EMI:"));
+        panel.add(emiField);
+
+        return panel;
+    }
+
+    private static JPanel createPersonalDetailsPanel() {
+        String[] genderTypes = { "Female", "Male", "Non-binary", "Other" };
+        JComboBox<String> genderDropdown = new JComboBox<>(genderTypes);
+
+        JTextField personalCustomerIdField = new JTextField();
+        JTextField nameField = new JTextField();
+        JTextField emailIdField = new JTextField();
+        JTextField ageField = new JTextField();
+        JTextField dobField = new JTextField();
+        JTextField pannumberField = new JTextField();
+        JTextField aadharnoField = new JTextField();
+        JTextField phoneNumberField = new JTextField();
+        JTextField nationalityField = new JTextField();
+
+        JPanel panel = new JPanel(new GridLayout(10, 2, 10, 10));
+        panel.setBorder(BorderFactory.createTitledBorder("Personal Details"));
+        panel.add(new JLabel("Customer ID:"));
+        panel.add(personalCustomerIdField);
+        panel.add(new JLabel("Name:"));
+        panel.add(nameField);
+        panel.add(new JLabel("Email ID:"));
+        panel.add(emailIdField);
+        panel.add(new JLabel("Age:"));
+        panel.add(ageField);
+        panel.add(new JLabel("Date of Birth:"));
         panel.add(dobField);
+        panel.add(new JLabel("PAN Number:"));
+        panel.add(pannumberField);
+        panel.add(new JLabel("Aadhar Number:"));
+        panel.add(aadharnoField);
+        panel.add(new JLabel("Phone Number:"));
+        panel.add(phoneNumberField);
+        panel.add(new JLabel("Gender:"));
+        panel.add(genderDropdown);
+        panel.add(new JLabel("Nationality:"));
+        panel.add(nationalityField);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Check Loan Status", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-        if (result == JOptionPane.OK_OPTION) {
-            String applicationId = applicationIdField.getText();
-            String dob = dobField.getText();
-            checkLoanStatus(applicationId, dob);
-        }
+        return panel;
     }
 
-    private static void checkLoanStatus(String applicationId, String dob) {
-        JOptionPane.showMessageDialog(null, "Checking status for Application ID: " + applicationId + " and Date of Birth: " + dob, "Loan Status", JOptionPane.INFORMATION_MESSAGE);
+    private static JPanel createDocumentsPanel() {
+        JButton nocFromBuilderButton = new JButton("Upload");
+        JLabel nocFromBuilderLabel = new JLabel("NOC from Builder: Not Uploaded");
+        JButton loaButton = new JButton("Upload");
+        JLabel loaLabel = new JLabel("Letter of Agreement (LOA): Not Uploaded");
+        JButton panButton = new JButton("Upload");
+        JLabel panLabel = new JLabel("PAN: Not Uploaded");
+        JButton voterIdButton = new JButton("Upload");
+        JLabel voterIdLabel = new JLabel("Voter ID: Not Uploaded");
+        JButton salarySlipButton = new JButton("Upload");
+        JLabel salarySlipLabel = new JLabel("Salary Slip: Not Uploaded");
+        JButton agreementToSaleButton = new JButton("Upload");
+        JLabel agreementToSaleLabel = new JLabel("Agreement to Sale: Not Uploaded");
+
+        JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
+        panel.setBorder(BorderFactory.createTitledBorder("Document Uploads"));
+
+        addUploadButton(panel, nocFromBuilderButton, nocFromBuilderLabel, "NOC from Builder");
+        addUploadButton(panel, loaButton, loaLabel, "Letter of Agreement (LOA)");
+        addUploadButton(panel, panButton, panLabel, "PAN");
+        addUploadButton(panel, voterIdButton, voterIdLabel, "Voter ID");
+        addUploadButton(panel, salarySlipButton, salarySlipLabel, "Salary Slip");
+        addUploadButton(panel, agreementToSaleButton, agreementToSaleLabel, "Agreement to Sale");
+
+        return panel;
     }
 
-    private static void showLoanCalculatorOptions() {
-        String[] options = {"Eligibility Calculator", "EMI Calculator"};
-        int choice = JOptionPane.showOptionDialog(null, "Which type of calculator would you like to use?", "Loan Calculator",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-
-        if (choice == 0) {
-            showEligibilityCalculator();
-        } else if (choice == 1) {
-            showEMICalculator();
-        }
+    private static JPanel createCalculatePanel() {
+        JButton calculateButton = new JButton("Calculate Max Loan Amount & EMI");
+        JPanel panel = new JPanel(new GridLayout(1, 1, 10, 10));
+        panel.add(calculateButton);
+        return panel;
     }
 
-    private static void showEligibilityCalculator() {
-        try {
-            String input = JOptionPane.showInputDialog(null, "Enter your net monthly salary:", "Eligibility Calculator", JOptionPane.QUESTION_MESSAGE);
-            if (input != null) {
-                double netMonthlySalary = Double.parseDouble(input);
-                double eligibility = calculateEligibility(netMonthlySalary);
-                JOptionPane.showMessageDialog(null, "Based on your net monthly salary, your maximum eligible loan amount is: Rs." + String.format("%.2f", eligibility), "Eligibility Result", JOptionPane.INFORMATION_MESSAGE);
+    private static void addUploadButton(JPanel panel, JButton button, JLabel label, String documentType) {
+        panel.add(new JLabel(documentType + ":"));
+        panel.add(button);
+        button.addActionListener(e -> {
+            int response = JOptionPane.showConfirmDialog(null, "Are you sure this is the correct document?",
+                    "Confirm Upload", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (response == JOptionPane.YES_OPTION) {
+                label.setText(documentType + ": Uploaded");
             }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Please enter a valid number.", "Input Error", JOptionPane.ERROR_MESSAGE);
-        }
+        });
+        panel.add(label);
     }
 
-    private static void showEMICalculator() {
-        try {
-            String principalInput = JOptionPane.showInputDialog(null, "Enter the loan principal amount:", "EMI Calculator", JOptionPane.QUESTION_MESSAGE);
-            String annualInterestRateInput = JOptionPane.showInputDialog(null, "Enter the annual interest rate (in %):", "EMI Calculator", JOptionPane.QUESTION_MESSAGE);
-            String tenureInput = JOptionPane.showInputDialog(null, "Enter the loan tenure (in years):", "EMI Calculator", JOptionPane.QUESTION_MESSAGE);
+    private static void addCalculateButtonListener(JPanel loanDetailsPanel) {
+        JButton calculateButton = (JButton) ((JPanel) ((JPanel) loanDetailsPanel.getParent()).getComponent(2)).getComponent(0);
+        calculateButton.addActionListener(e -> {
+            JTextField monthlyIncomeField = (JTextField) ((JPanel) loanDetailsPanel.getComponent(3)).getComponent(1);
+            JTextField loanAmountField = (JTextField) ((JPanel) loanDetailsPanel.getComponent(1)).getComponent(1);
+            JTextField tenureField = (JTextField) ((JPanel) loanDetailsPanel.getComponent(2)).getComponent(1);
+            JTextField maxLoanAmountField = (JTextField) ((JPanel) loanDetailsPanel.getComponent(6)).getComponent(1);
+            JTextField emiField = (JTextField) ((JPanel) loanDetailsPanel.getComponent(7)).getComponent(1);
 
-            if (principalInput != null && annualInterestRateInput != null && tenureInput != null) {
-                double principal = Double.parseDouble(principalInput);
-                double annualInterestRate = Double.parseDouble(annualInterestRateInput);
-                int tenureInYears = Integer.parseInt(tenureInput);
-                double emi = calculateEMI(principal, annualInterestRate, tenureInYears);
-                JOptionPane.showMessageDialog(null, "The EMI for your loan is: Rs." + String.format("%.2f", emi), "EMI Result", JOptionPane.INFORMATION_MESSAGE);
+            try {
+                double monthlyIncome = Double.parseDouble(monthlyIncomeField.getText());
+                double loanAmount = Double.parseDouble(loanAmountField.getText());
+                int tenure = Integer.parseInt(tenureField.getText());
+                double interestRate = 8.5;
+
+                double maxLoanAmount = LoanCalculator.calculateEligibility(monthlyIncome);
+                double emi = LoanCalculator.calculateEMI(loanAmount, interestRate, tenure);
+
+                maxLoanAmountField.setText(String.format("%.2f", maxLoanAmount));
+                emiField.setText(String.format("%.2f", emi));
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Please enter valid numbers.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Please enter valid numbers.", "Input Error", JOptionPane.ERROR_MESSAGE);
-        }
+        });
     }
 
-    // Methods for calculations
-    public static double calculateEligibility(double netMonthlySalary) {
-        return 60 * (0.6 * netMonthlySalary);
+    private static int generateApplicationId() {
+        return (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
     }
-
-    public static double calculateEMI(double principal, double annualInterestRate, int tenureInYears) {
-        double monthlyInterestRate = annualInterestRate / 12 / 100;
-        int tenureInMonths = tenureInYears * 12;
-        return (principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, tenureInMonths)) /
-                (Math.pow(1 + monthlyInterestRate, tenureInMonths) - 1);
-    }
-
-//    private static void showAboutUs() {
-//        // Create the content for the About Us page
-//        String aboutUs = "About Us\n\n" +
-//                         "Welcome to Home Loan Solutions!\n\n" +
-//                         "At Home Loan Solutions, our mission is to help you achieve your dream of owning a home with ease and confidence. We understand that securing a home loan can be a complex and daunting process, which is why we are dedicated to providing you with clear, straightforward, and personalized financial solutions.\n\n" +
-//                         "Who We Are\n\n" +
-//                         "Founded in [Year], Home Loan Solutions is a leading provider of home loan services committed to making home ownership accessible to everyone. Our team of experienced financial advisors and mortgage experts is here to guide you through every step of the loan application process, from pre-approval to closing.\n\n" +
-//                         "Our Services\n\n" +
-//                         "- Home Purchase Loans: We offer competitive rates and flexible terms for purchasing your new home.\n" +
-//                         "- Refinancing: Lower your monthly payments or access your home's equity with our refinancing options.\n" +
-//                         "- Home Equity Loans: Tap into the equity of your current home for renovations, debt consolidation, or other needs.\n" +
-//                         "- Pre-Approval: Get a head start on your home buying journey with our quick and easy pre-approval process.\n\n" +
-//                         "Why Choose Us?\n\n" +
-//                         "- Expert Advice: Our knowledgeable team is dedicated to providing you with expert advice tailored to your financial situation.\n" +
-//                         "- Personalized Solutions: We offer a range of loan products designed to meet your unique needs and goals.\n" +
-//                         "- Transparency: We believe in clear and honest communication, ensuring you understand every aspect of your loan.\n" +
-//                         "- Customer-Centric Approach: Your satisfaction is our priority. We are here to support you throughout the entire loan process and beyond.\n\n" +
-//                         "Our Commitment\n\n" +
-//                         "At Home Loan Solutions, we are committed to building lasting relationships with our clients. Our goal is to help you make informed decisions and secure the best loan options available. We take pride in our reputation for integrity, professionalism, and excellence in customer service.\n\n" +
-//                         "Get in Touch\n\n" +
-//                         "We are here to help you every step of the way. If you have any questions or need assistance, please feel free to contact us at:\n\n" +
-//                         "- Phone: [Your Phone Number]\n" +
-//                         "- Email: [Your Email Address]\n" +
-//                         "- Address: [Your Office Address]\n\n" +
-//                         "Thank you for choosing Home Loan Solutions. We look forward to helping you find the perfect home loan for your needs.";
-//
-//        // Create a JTextArea to display the content
-//        JTextArea textArea = new JTextArea(20, 50); // 20 rows, 50 columns
-//        textArea.setText(aboutUs);
-//        textArea.setEditable(false);
-//        textArea.setLineWrap(true);
-//        textArea.setWrapStyleWord(true);
-//
-//        // Put the JTextArea in a JScrollPane
-//        JScrollPane scrollPane = new JScrollPane(textArea);
-//
-//        // Create and display the dialog
-//        JOptionPane.showMessageDialog(null, scrollPane, "About Us", JOptionPane.INFORMATION_MESSAGE);
-//    }
-
-//    private static void showFAQs() {
-//        JOptionPane.showMessageDialog(null, "FAQs: Frequently Asked Questions", "FAQs", JOptionPane.INFORMATION_MESSAGE);
-//    }
 }

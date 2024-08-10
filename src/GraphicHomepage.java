@@ -52,7 +52,14 @@ public class GraphicHomepage {
 
         // Button action listeners
         loginButton.addActionListener(e -> LoginRegister.showLoginRegisterOptions());
-        applyLoanButton.addActionListener(e -> ApplyLoan.showLoanApplicationPage());
+        applyLoanButton.addActionListener(e -> {
+        	if(Globals.custId==0) {
+        		LoginRegister.showLoginRegisterOptions();
+        	}
+        	else {
+        		ApplyLoan.showLoanApplicationPage();
+        	}
+         });
         checkStatusButton.addActionListener(e -> LoanStatus.showCheckLoanStatusDialog());
         loanCalculatorButton.addActionListener(e -> LoanCalculator.showLoanCalculatorOptions());
         aboutUsButton.addActionListener(e -> AboutUs.showAboutUs());
@@ -93,10 +100,60 @@ public class GraphicHomepage {
         mainPanel.add(exitButton);
         mainPanel.add(logoutButton);
         
-        applyLoanButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "You chose to Apply for a New Loan."));
+        applyLoanButton.addActionListener(e -> {
+        	if(Globals.custId==0) {
+        		LoginRegister.showLoginRegisterOptions();
+        	}
+        	else {
+        		ApplyLoan.showLoanApplicationPage();
+        	}
+         });
         checkStatusButton.addActionListener(e -> LoanStatus.showCheckLoanStatusDialog());
         loanCalculatorButton.addActionListener(e -> LoanCalculator.showLoanCalculatorOptions());
         aboutUsButton.addActionListener(e -> AboutUs.showAboutUs());
+        faqsButton.addActionListener(e -> FAQs.showFAQs());
+        exitButton.addActionListener(e -> System.exit(0)); // Exit the application
+        logoutButton.addActionListener(e -> logout());
+
+        // Update the frame
+        frame.revalidate();
+        frame.repaint();
+    }
+    
+    public static void adminLogin(String customerId) {
+        // Remove all components from the panel
+        mainPanel.removeAll();
+
+        // Create and add customer ID label
+        customerIdLabel = new JLabel("Customer ID(Admin): " + customerId, JLabel.CENTER);
+        
+
+        // Create and add log out button
+        logoutButton = new JButton("Log Out");
+        logoutButton.addActionListener(e -> logout());
+        
+
+        // Re-add other buttons
+        JButton approveLoans = new JButton("Approve Loans");
+        JButton approvedLoans = new JButton("See Approved Loans");
+        JButton pendingLoans = new JButton("See Pending Loans");
+        JButton rejectedLoans = new JButton("See Rejected Loans");
+        JButton faqsButton = new JButton("FAQs");
+        JButton exitButton = new JButton("Exit");
+
+        mainPanel.add(customerIdLabel);
+        mainPanel.add(approveLoans);
+        mainPanel.add(approvedLoans);
+        mainPanel.add(pendingLoans);
+        mainPanel.add(rejectedLoans);
+        mainPanel.add(faqsButton);
+        mainPanel.add(exitButton);
+        mainPanel.add(logoutButton);
+        
+        approveLoans.addActionListener(e -> JOptionPane.showMessageDialog(frame, "You chose to approve loans"));
+        approvedLoans.addActionListener(e -> JOptionPane.showMessageDialog(frame, "You chose to see approved loans"));
+        pendingLoans.addActionListener(e -> JOptionPane.showMessageDialog(frame, "You chose to see pending loans"));
+        rejectedLoans.addActionListener(e -> JOptionPane.showMessageDialog(frame, "You chose to see rejected loans"));
         faqsButton.addActionListener(e -> FAQs.showFAQs());
         exitButton.addActionListener(e -> System.exit(0)); // Exit the application
         logoutButton.addActionListener(e -> logout());
@@ -190,7 +247,7 @@ public class GraphicHomepage {
 
          // Create and add log out button
          loginButton = new JButton("Log in / Register");
-         loginButton.addActionListener(e -> LoginRegister.showLoginRegisterOptions());
+        // loginButton.addActionListener(e -> LoginRegister.showLoginRegisterOptions());
          
 
          // Re-add other buttons
@@ -211,7 +268,14 @@ public class GraphicHomepage {
          mainPanel.add(copyright);
          
          loginButton.addActionListener(e -> LoginRegister.showLoginRegisterOptions());
-         applyLoanButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "You chose to Apply for a New Loan."));
+         applyLoanButton.addActionListener(e -> {
+        	if(Globals.custId==0) {
+        		LoginRegister.showLoginRegisterOptions();
+        	}
+        	else {
+        		ApplyLoan.showLoanApplicationPage();
+        	}
+         });
          checkStatusButton.addActionListener(e -> LoanStatus.showCheckLoanStatusDialog());
          loanCalculatorButton.addActionListener(e -> LoanCalculator.showLoanCalculatorOptions());
          aboutUsButton.addActionListener(e -> AboutUs.showAboutUs());
@@ -222,6 +286,7 @@ public class GraphicHomepage {
          // Update the frame
          frame.revalidate();
          frame.repaint();
+         Globals.custId=0;
     }
 
 //    private static void showCheckLoanStatusDialog() {
