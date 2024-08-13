@@ -77,4 +77,67 @@ public class UserDAOImpl implements UserDAO
 		return "";
 	}
 	
+	public int getId() {
+		try {
+			Statement statement = conn.createStatement();
+			ResultSet idResult=statement.executeQuery("select max(customerId) from user");
+			if(idResult.next())
+				return idResult.getInt(1);
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public String getName(int id)
+	 {
+		 try {
+//			 	
+//				Statement statement = conn.createStatement();
+//				ResultSet fname=statement.executeQuery("SELECT fname FROM user where customerId="+id);
+//				ResultSet mname=statement.executeQuery("SELECT mname FROM user where customerId="+id);
+//				ResultSet lname=statement.executeQuery("SELECT lname FROM user where customerId="+id);	
+//				System.out.println(fname);
+//				fname.next();
+//				mname.next();
+//				lname.next();
+//				System.out.println(fname.getString(1));
+//				return fname.getString(1)+" "+mname.getString(1)+" "+lname.getString(1);
+//				return fname.getString(1);
+			 
+			 Statement statement = conn.createStatement();
+			 ResultSet rs = statement.executeQuery("SELECT fname, mname, lname FROM user WHERE customerId=" + id);
+
+			 if (rs.next()) {
+			     String fname = rs.getString("fname");
+			     String mname = rs.getString("mname");
+			     String lname = rs.getString("lname");
+			     
+			     System.out.println("First Name: " + fname);
+			     System.out.println("Middle Name: " + mname);
+			     System.out.println("Last Name: " + lname);
+			     return (fname+" "+mname+" "+lname);
+			 }
+
+			 rs.close();
+			 statement.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+			return "";
+	 }
+
+
+
+
+
+
+
+
+
+
 }

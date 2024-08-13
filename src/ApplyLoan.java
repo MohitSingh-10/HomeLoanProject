@@ -30,7 +30,10 @@ public class ApplyLoan{
 	}
 	
 	public static void showLoanApplicationPage() {
-	 
+			PersonalDetailsDAOImpl persona = new PersonalDetailsDAOImpl();
+		
+			boolean exists = persona.alreadyExisting(Globals.custId);
+			exists=!exists;
 			// Income Details Fields
 		    String[] employmentTypes = { "Salaried", "Self-Employed", "Freelancer", "Retired", "Unemployed" };
 		    JComboBox<String> employmentTypeDropdown = new JComboBox<>(employmentTypes);
@@ -38,6 +41,8 @@ public class ApplyLoan{
 		    JTextField employerNameField = new JTextField();
 	 
 		    JTextField retirementAgeField = new JTextField();
+		    
+		    
 	 
 		    // Loan Details Fields
 //		    JTextField applicationIdField = new JTextField();
@@ -157,33 +162,38 @@ public class ApplyLoan{
 	 
 		    JPanel calculate = new JPanel(new GridLayout(1, 2, 1, 1));
 		    calculate.add(calculateButton);
-	 
+		    
+		    JPanel personalDetailsPanel = new JPanel(new GridLayout(10, 2));
 		    // Personal Details Section
-		    JPanel personalDetailsPanel = new JPanel(new GridLayout(10, 2, 10, 10));
-		    personalDetailsPanel.setBorder(BorderFactory.createTitledBorder("Personal Details"));
-		    personalDetailsPanel.add(new JLabel("Customer ID:"));
-		    personalDetailsPanel.add(customerIdField);
-		    customerIdField.setText(String.valueOf(Globals.custId));
-		    customerIdField.setEditable(false);
-		    personalDetailsPanel.add(new JLabel("Name:"));
-		    personalDetailsPanel.add(nameField);
-		    personalDetailsPanel.add(new JLabel("Email ID:"));
-		    personalDetailsPanel.add(emailIdField);
-		    personalDetailsPanel.add(new JLabel("Age:"));
-		    personalDetailsPanel.add(ageField);
-		    personalDetailsPanel.add(new JLabel("Date of Birth:"));
-		    personalDetailsPanel.add(dobField);
-		    personalDetailsPanel.add(new JLabel("PAN Number:"));
-		    personalDetailsPanel.add(pannumberField);
-		    personalDetailsPanel.add(new JLabel("Aadhar Number:"));
-		    personalDetailsPanel.add(aadharnoField);
-		    personalDetailsPanel.add(new JLabel("Phone Number:"));
-		    personalDetailsPanel.add(phoneNumberField);
-		    personalDetailsPanel.add(new JLabel("Gender:"));
-		    personalDetailsPanel.add(genderDropdown);
-		    personalDetailsPanel.add(new JLabel("Nationality:"));
-		    personalDetailsPanel.add(nationalityField);
-	 
+		    if(exists) {
+		    		personalDetailsPanel = new JPanel(new GridLayout(10, 2, 10, 10));
+		    
+		    		personalDetailsPanel.setBorder(BorderFactory.createTitledBorder("Personal Details"));
+				    personalDetailsPanel.add(new JLabel("Customer ID:"));
+				    personalDetailsPanel.add(customerIdField);
+				    customerIdField.setText(String.valueOf(Globals.custId));
+				    customerIdField.setEditable(false);
+				    personalDetailsPanel.add(new JLabel("Name:"));
+				    personalDetailsPanel.add(nameField);
+				    personalDetailsPanel.add(new JLabel("Email ID:"));
+				    personalDetailsPanel.add(emailIdField);
+				    personalDetailsPanel.add(new JLabel("Age:"));
+				    personalDetailsPanel.add(ageField);
+				    personalDetailsPanel.add(new JLabel("Date of Birth:"));
+				    personalDetailsPanel.add(dobField);
+				    personalDetailsPanel.add(new JLabel("PAN Number:"));
+				    personalDetailsPanel.add(pannumberField);
+				    personalDetailsPanel.add(new JLabel("Aadhar Number:"));
+				    personalDetailsPanel.add(aadharnoField);
+				    personalDetailsPanel.add(new JLabel("Phone Number:"));
+				    personalDetailsPanel.add(phoneNumberField);
+				    personalDetailsPanel.add(new JLabel("Gender:"));
+				    personalDetailsPanel.add(genderDropdown);
+				    personalDetailsPanel.add(new JLabel("Nationality:"));
+				    personalDetailsPanel.add(nationalityField);
+		    }
+		   
+//	 
 	 
 	 
 		    // Document Uploads Section
@@ -268,7 +278,7 @@ public class ApplyLoan{
 	 
 		    gbc.gridy++;
 		    panel.add(calculate, gbc);
-	 
+		    
 		    gbc.gridy++;
 		    panel.add(personalDetailsPanel, gbc);
 	 
@@ -329,34 +339,43 @@ public class ApplyLoan{
 		            double emi = Double.parseDouble(emiField.getText());
 	 
 		            // Personal details
-		            int customerId = Integer.parseInt(customerIdField.getText());
-		            String name = nameField.getText();
-		            String emailId = emailIdField.getText();
-		            int age = Integer.parseInt(ageField.getText());
-		            String dob = dobField.getText();
-		            String panNumber = pannumberField.getText();
-		            String aadharNumber = aadharnoField.getText();
-		            String phoneNumber = phoneNumberField.getText();
-		            String gender = (String) genderDropdown.getSelectedItem();
-		            String nationality = nationalityField.getText();
-	 
-		            PersonalDetails p = new PersonalDetails();
-		            p.setAadharNo(Long.parseLong(aadharNumber));
-		            p.setAge(age);
-		            p.setCustomerId(customerId);
-		            p.setDob(dob);
-		            p.setEmail(emailId);
-		            p.setGender(gender.charAt(0));
-		            p.setName(name);
-		            p.setNationality(nationality);
-		            p.setPanNumber(panNumber);
-		            p.setPhoneNumber(phoneNumber);
 		            
-		            PersonalDetailsDAOImpl a = new PersonalDetailsDAOImpl();
-		            a.createPersonalDetails(p);
+		         int customerId = Globals.custId;
+		            	
+		            if(customerId==0) {
+		            	customerId = Integer.parseInt(customerIdField.getText());
+		            
+		            
+			            String name = nameField.getText();
+			            String emailId = emailIdField.getText();
+			            int age = Integer.parseInt(ageField.getText());
+			            String dob = dobField.getText();
+			            String panNumber = pannumberField.getText();
+			            String aadharNumber = aadharnoField.getText();
+			            String phoneNumber = phoneNumberField.getText();
+			            String gender = (String) genderDropdown.getSelectedItem();
+			            String nationality = nationalityField.getText();
+		 
+			            PersonalDetails p = new PersonalDetails();
+			            p.setAadharNo(Long.parseLong(aadharNumber));
+			            p.setAge(age);
+			            p.setCustomerId(customerId);
+			            p.setDob(dob);
+			            p.setEmail(emailId);
+			            p.setGender(gender.charAt(0));
+			            p.setName(name);
+			            p.setNationality(nationality);
+			            p.setPanNumber(panNumber);
+			            p.setPhoneNumber(phoneNumber);
+			            
+			            PersonalDetailsDAOImpl a = new PersonalDetailsDAOImpl();
+			            a.createPersonalDetails(p);
+		           
+		            }
 		            
 		            // Create LoanApplication object
 		            LoanApplication app = new LoanApplication();
+		 
 		            app.setCustomerId(customerId);
 		            app.setEmploymentType(employmentType);
 		            app.setRetirementAge(retirementAge);
@@ -374,7 +393,7 @@ public class ApplyLoan{
 		            app.setEstimatedCost(estimatedCost);
 		            //app.setEmi(emi);
 	 
-		            app.setName(name);
+//		            app.setName(name);
 		            //app.setEmailId(emailId);
 		            //app.setAge(age);
 		            //app.setDateOfBirth(dob);
@@ -385,8 +404,10 @@ public class ApplyLoan{
 		            //app.setNationality(nationality);
 	 
 		            // Call DAO to save application
-		            LoanApplicationDAOImpl dao = new LoanApplicationDAOImpl();
-		            dao.createApplication(app);
+		            LoanApplicationDAOImpl loanApp = new LoanApplicationDAOImpl();
+		            loanApp.createApplication(app);
+		            int appId = loanApp.getId();
+		            JOptionPane.showMessageDialog(null, "Your Application ID : "+appId);
 	 
 		            JOptionPane.showMessageDialog(null, "Application submitted successfully!");
 		            frame.dispose();

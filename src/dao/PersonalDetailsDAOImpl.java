@@ -54,6 +54,21 @@ Connection conn=null;
 		}
 		
 	}
+	public boolean alreadyExisting(int cid)
+	{
+		try {
+			Statement statement = conn.createStatement();
+			ResultSet stmt = statement.executeQuery("select * from personalDetails where customerId="+cid);
+			if (stmt.next() ) {    
+			    return true;
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return false;
+	}
 }
 
 

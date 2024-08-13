@@ -87,7 +87,7 @@ public class GraphicHomepage {
         JButton applyLoanButton = new JButton("Apply for a New Loan");
         JButton checkStatusButton = new JButton("Check Loan Status");
         JButton loanCalculatorButton = new JButton("Loan Calculator");
-        JButton aboutUsButton = new JButton("About Us");
+        JButton accountDetailsButton = new JButton("Check Account Details");
         JButton faqsButton = new JButton("FAQs");
         JButton exitButton = new JButton("Exit");
 
@@ -95,7 +95,7 @@ public class GraphicHomepage {
         mainPanel.add(applyLoanButton);
         mainPanel.add(checkStatusButton);
         mainPanel.add(loanCalculatorButton);
-        mainPanel.add(aboutUsButton);
+        mainPanel.add(accountDetailsButton);
         mainPanel.add(faqsButton);
         mainPanel.add(exitButton);
         mainPanel.add(logoutButton);
@@ -110,7 +110,7 @@ public class GraphicHomepage {
          });
         checkStatusButton.addActionListener(e -> LoanStatus.showCheckLoanStatusDialog());
         loanCalculatorButton.addActionListener(e -> LoanCalculator.showLoanCalculatorOptions());
-        aboutUsButton.addActionListener(e -> AboutUs.showAboutUs());
+        accountDetailsButton.addActionListener(e -> BankBalance.displayAccountDetails());
         faqsButton.addActionListener(e -> FAQs.showFAQs());
         exitButton.addActionListener(e -> System.exit(0)); // Exit the application
         logoutButton.addActionListener(e -> logout());
@@ -134,11 +134,11 @@ public class GraphicHomepage {
         
 
         // Re-add other buttons
-        JButton approveLoans = new JButton("Approve Loans");
+        JButton approveLoans = new JButton("Approve/Reject Loans");
         JButton approvedLoans = new JButton("See Approved Loans");
         JButton pendingLoans = new JButton("See Pending Loans");
         JButton rejectedLoans = new JButton("See Rejected Loans");
-        JButton faqsButton = new JButton("FAQs");
+        JButton faqsButton = new JButton("Show all loans of a user");
         JButton exitButton = new JButton("Exit");
 
         mainPanel.add(customerIdLabel);
@@ -150,11 +150,11 @@ public class GraphicHomepage {
         mainPanel.add(exitButton);
         mainPanel.add(logoutButton);
         
-        approveLoans.addActionListener(e -> JOptionPane.showMessageDialog(frame, "You chose to approve loans"));
-        approvedLoans.addActionListener(e -> JOptionPane.showMessageDialog(frame, "You chose to see approved loans"));
-        pendingLoans.addActionListener(e -> JOptionPane.showMessageDialog(frame, "You chose to see pending loans"));
-        rejectedLoans.addActionListener(e -> JOptionPane.showMessageDialog(frame, "You chose to see rejected loans"));
-        faqsButton.addActionListener(e -> FAQs.showFAQs());
+        approveLoans.addActionListener(e -> AdminFunctionality.showAdminApprove());
+        approvedLoans.addActionListener(e -> AdminFunctionality.showApproved());
+        pendingLoans.addActionListener(e -> AdminFunctionality.showPending());
+        rejectedLoans.addActionListener(e -> AdminFunctionality.showRejected());
+        faqsButton.addActionListener(e -> AdminFunctionality.showApplication());
         exitButton.addActionListener(e -> System.exit(0)); // Exit the application
         logoutButton.addActionListener(e -> logout());
 
@@ -163,79 +163,7 @@ public class GraphicHomepage {
         frame.repaint();
     }
     
-//    private static void showLoginRegisterOptions() {
-//        String[] options = {"Log In", "Register"};
-//        int choice = JOptionPane.showOptionDialog(null, "Please select an option:", "Log in / Register",
-//                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-//
-//        if (choice == 0) {
-//            showLoginDialog();
-//        } else if (choice == 1) {
-//            JOptionPane.showMessageDialog(null, "You chose Register.");
-//            // Add functionality for registering
-//        }
-//    }
 
-//    private static void showLoginDialog() {
-//        JPanel panel = new JPanel(new GridLayout(2, 2));
-//
-//        JTextField customerIdField = new JTextField();
-//        JPasswordField passwordField = new JPasswordField();
-//
-//        panel.add(new JLabel("Customer ID:"));
-//        panel.add(customerIdField);
-//        panel.add(new JLabel("Password:"));
-//        panel.add(passwordField);
-//
-//        int result = JOptionPane.showConfirmDialog(null, panel, "Log In", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-//
-//        if (result == JOptionPane.OK_OPTION) {
-//            String customerId = customerIdField.getText();
-//            String password = new String(passwordField.getPassword());
-//            login(customerId, password);
-//        }
-//    }
-
-//    private static void login(String customerId, String password) {
-//        // Placeholder for login validation
-//        JOptionPane.showMessageDialog(null, "Logged in successfully with Customer ID: " + customerId, "Login", JOptionPane.INFORMATION_MESSAGE);
-//        
-//        // Update the main panel to reflect the login
-//        updateMainPanelAfterLogin(customerId);
-//    }
-
-//    private static void updateMainPanelAfterLogin(String customerId) {
-//        // Remove all components from the panel
-//        mainPanel.removeAll();
-//
-//        // Create and add customer ID label
-//        customerIdLabel = new JLabel("Customer ID: " + customerId, JLabel.CENTER);
-//        mainPanel.add(customerIdLabel);
-//
-//        // Create and add log out button
-//        logoutButton = new JButton("Log Out");
-//        logoutButton.addActionListener(e -> logout());
-//        mainPanel.add(logoutButton);
-//
-//        // Re-add other buttons
-//        JButton applyLoanButton = new JButton("Apply for a New Loan");
-//        JButton checkStatusButton = new JButton("Check Loan Status");
-//        JButton loanCalculatorButton = new JButton("Loan Calculator");
-//        JButton aboutUsButton = new JButton("About Us");
-//        JButton faqsButton = new JButton("FAQs");
-//        JButton exitButton = new JButton("Exit");
-//
-//        mainPanel.add(applyLoanButton);
-//        mainPanel.add(checkStatusButton);
-//        mainPanel.add(loanCalculatorButton);
-//        mainPanel.add(aboutUsButton);
-//        mainPanel.add(faqsButton);
-//        mainPanel.add(exitButton);
-//
-//        // Update the frame
-//        frame.revalidate();
-//        frame.repaint();
-//    }
 
     private static void logout() {
         // Remove customer ID label and logout button

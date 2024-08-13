@@ -43,6 +43,8 @@ public class LoginRegister {
             login(customerId, password);
         }
     }
+    
+    
 
     private static void login(String customerId, String password) {
         // Placeholder for login validation
@@ -134,10 +136,14 @@ public class LoginRegister {
 		user.setLname(lName);
 		UserDAOImpl useri=new UserDAOImpl();
 		useri.createUser(user);
+		int id = useri.getId();
+		
 //		int id = user.getCustomerId();
-//		JOptionPane.showMessageDialog(null, "Your Customer ID : "+id);
+		JOptionPane.showMessageDialog(null, "Your Customer ID : "+id);
     }
-
+    
+    
+    
 
     
 }

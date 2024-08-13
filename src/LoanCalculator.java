@@ -28,16 +28,30 @@ public class LoanCalculator {
 
     private static void showEMICalculator() {
         try {
+        	String annualInterestRateInput="0";
+        	String tenureInput="0";
+        	Boolean ok=false;
             String principalInput = JOptionPane.showInputDialog(null, "Enter the loan principal amount:", "EMI Calculator", JOptionPane.QUESTION_MESSAGE);
-            String annualInterestRateInput = JOptionPane.showInputDialog(null, "Enter the annual interest rate (in %):", "EMI Calculator", JOptionPane.QUESTION_MESSAGE);
-            String tenureInput = JOptionPane.showInputDialog(null, "Enter the loan tenure (in years):", "EMI Calculator", JOptionPane.QUESTION_MESSAGE);
-
-            if (principalInput != null && annualInterestRateInput != null && tenureInput != null) {
+            if(principalInput!=null) {
+            	 annualInterestRateInput = JOptionPane.showInputDialog(null, "Enter the annual interest rate (in %):", "EMI Calculator", JOptionPane.QUESTION_MESSAGE);
+            	 if(annualInterestRateInput!=null) {
+            		 tenureInput = JOptionPane.showInputDialog(null, "Enter the loan tenure (in years):", "EMI Calculator", JOptionPane.QUESTION_MESSAGE);
+            		 if(tenureInput!=null) {
+            			 ok=true;
+            		 }
+            	 }
+            }
+            
+           
+            if (ok) {
                 double principal = Double.parseDouble(principalInput);
                 double annualInterestRate = Double.parseDouble(annualInterestRateInput);
                 int tenureInYears = Integer.parseInt(tenureInput);
                 double emi = calculateEMI(principal, annualInterestRate, tenureInYears);
                 JOptionPane.showMessageDialog(null, "The EMI for your loan is: Rs." + String.format("%.2f", emi), "EMI Result", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else {
+            	JOptionPane.showMessageDialog(null, "Please fill all the fields", "EMI Result", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Please enter valid numbers.", "Input Error", JOptionPane.ERROR_MESSAGE);
@@ -50,7 +64,7 @@ public class LoanCalculator {
     }
 
     public static double calculateEMI(double principal, double annualInterestRate, int tenureInYears) {
-        double monthlyInterestRate = annualInterestRate / 12 / 100;
+        double monthlyInterestRate = annualInterestRate / 1200;
         int tenureInMonths = tenureInYears * 12;
         return (principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, tenureInMonths)) /
                 (Math.pow(1 + monthlyInterestRate, tenureInMonths) - 1);

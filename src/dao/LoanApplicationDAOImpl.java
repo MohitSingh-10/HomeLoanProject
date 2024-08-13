@@ -161,6 +161,230 @@ public class LoanApplicationDAOImpl implements LoanApplicationDAO{
             e.printStackTrace();
         }
     }
+    
+    public String [][] allPendingApplication() {
+		ArrayList<ArrayList<String>> arr=new ArrayList<>();
+		try {
+			Statement statement = conn.createStatement();
+			ResultSet result=statement.executeQuery("select * from loanapplication where applicationstatus = 'pending'");
+			ResultSetMetaData rsmd = result.getMetaData();
+			while(result.next())
+			{
+				ArrayList<String> temp=new ArrayList<>();
+				temp.add(result.getString(1));
+				temp.add(result.getString(2));
+				temp.add(result.getString(9));
+				temp.add(result.getString(10));
+				temp.add(result.getString(11));
+				temp.add(result.getString(12));
+				arr.add(temp);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		String ans[][]=new String[arr.size()][7];
+		for(int i=0;i<arr.size();i++)
+		{
+			for(int j=0;j<6;j++)
+				ans[i][j]=arr.get(i).get(j);
+		}
+		return ans;
+	}
+    
+    @Override
+    public String [][] allRejectedApplication() {
+		ArrayList<ArrayList<String>> arr=new ArrayList<>();
+		try {
+			Statement statement = conn.createStatement();
+			ResultSet result=statement.executeQuery("select * from loanapplication where applicationstatus = 'rejected'");
+			ResultSetMetaData rsmd = result.getMetaData();
+			while(result.next())
+			{
+				ArrayList<String> temp=new ArrayList<>();
+				temp.add(result.getString(1));
+				temp.add(result.getString(2));
+				temp.add(result.getString(9));
+				temp.add(result.getString(10));
+				temp.add(result.getString(11));
+				temp.add(result.getString(12));
+				arr.add(temp);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		String ans[][]=new String[arr.size()][7];
+		for(int i=0;i<arr.size();i++)
+		{
+			for(int j=0;j<6;j++)
+				ans[i][j]=arr.get(i).get(j);
+		}
+		return ans;
+	}
+    
+    @Override
+    public String [][] allApprovedApplication() {
+		ArrayList<ArrayList<String>> arr=new ArrayList<>();
+		try {
+			Statement statement = conn.createStatement();
+			ResultSet result=statement.executeQuery("select * from applicationstatus");
+			ResultSetMetaData rsmd = result.getMetaData();
+			while(result.next())
+			{
+				ArrayList<String> temp=new ArrayList<>();
+				temp.add(result.getString(1));
+				temp.add(result.getString(2));
+				temp.add(result.getString(3));
+				temp.add(result.getString(4));
+				temp.add(result.getString(5));
+				temp.add(result.getString(6));
+				temp.add(result.getString(7));//1-2-9-10-11-12
+				arr.add(temp);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		String ans[][]=new String[arr.size()][7];
+		for(int i=0;i<arr.size();i++)
+		{
+			for(int j=0;j<7;j++)
+				ans[i][j]=arr.get(i).get(j);
+		}
+		return ans;
+	}
+    
+    public int getId() {
+		try {
+			Statement statement = conn.createStatement();
+			ResultSet idResult=statement.executeQuery("select max(applicationId) from loanApplication");
+			if(idResult.next())
+				return idResult.getInt(1);
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return 0;
+	}
 
+    public String approveApplication(int id)
+	{
+		String s = null;
+		try {
+			Statement statement = conn.createStatement();
+			ResultSet r=statement.executeQuery("select applicationstatus from loanapplication where applicationId="+id);
+			if(r.next())
+			{
+				String status=r.getString(1);
+				if(status.equals("approved"))
+					return "The loan is already approved";
+				else if(status.equals("rejected"))
+					return "Cannot Approve a rejected loan";
+			}
+			else
+			{
+				return "No loan application exists with the given id";
+			}
+			int result=statement.executeUpdate("update loanapplication set applicationstatus = 'approved' where applicationId="+id);
+			ApplicationStatusDAOImpl a= new ApplicationStatusDAOImpl();
+			a.createApplicationStatus(id);
+			return "Your loan has been approved";
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return s;
+	}
+    
+    public String rejectApplication(int id) {
+//        try {
+//            // Check if the applicationId exists
+//            PreparedStatement checkStatement = conn.prepareStatement("SELECT COUNT(*) FROM loanapplication WHERE applicationId = ?");
+//            checkStatement.setInt(1, id);
+//            ResultSet rs = checkStatement.executeQuery();
+//            rs.next(); // Move the cursor to the first row
+//            int count = rs.getInt(1);
+//
+//            if (count > 0) {
+//                // Application ID exists, proceed with the update
+//                Statement statement = conn.createStatement();
+//                int result = statement.executeUpdate("UPDATE loanapplication SET applicationstatus = 'rejected' WHERE applicationId=" + id);
+//
+//                ApplicationStatusDAOImpl a = new ApplicationStatusDAOImpl();
+//                a.createApplicationStatus(id);
+//
+//                return "Loan rejected";
+//            } else {
+//                // Application ID does not exist
+//                return "Application ID " + id + " does not exist.";
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return "An error occurred while rejecting the loan.";
+//        }
+    	String s = null;
+		try {
+			Statement statement = conn.createStatement();
+			ResultSet r=statement.executeQuery("select applicationstatus from loanapplication where applicationId="+id);
+			if(r.next())
+			{
+				String status=r.getString(1);
+				if(status.equals("approved"))
+					return "Cannot reject an approved loan";
+				else if(status.equals("rejected"))
+					return "The application is already rejected";
+			}
+			else
+			{
+				return "No loan application exists with the given id";
+			}
+			int result=statement.executeUpdate("update loanapplication set applicationstatus = 'rejected' where applicationId="+id);
+
+			return "Loan application has been rejected";
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return s;
+    }
+    
+    public String[][] allLoanUid(int id) {
+		ArrayList<ArrayList<String>> arr=new ArrayList<>();
+		try {
+			Statement statement = conn.createStatement();
+			ResultSet result=statement.executeQuery("select * from loanapplication where customerId="+id);
+			ResultSetMetaData rsmd = result.getMetaData();
+			while(result.next())
+			{
+				ArrayList<String> temp=new ArrayList<>();
+				temp.add(result.getString(1)); //applicationID
+				temp.add(result.getString(10));//monthly income
+				temp.add(result.getString(11));//loan amount
+				temp.add(result.getString(12));//tenure
+				temp.add(result.getString(14));//applicationstatus;
+				arr.add(temp);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		String ans[][]=new String[arr.size()][7];
+		for(int i=0;i<arr.size();i++)
+		{
+			for(int j=0;j<5;j++)
+				ans[i][j]=arr.get(i).get(j);
+		}
+		return ans;
+	}
+    
+    
 
 }

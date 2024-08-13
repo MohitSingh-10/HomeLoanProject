@@ -26,16 +26,6 @@ public class LoanStatus {
     private static void checkLoanStatus(int applicationId, String dob) {
     	ApplicationStatusDAOImpl a=new ApplicationStatusDAOImpl();
 		String ans=a.getApplicationStatus(applicationId,dob);
-		System.out.println(ans);
 		JOptionPane.showMessageDialog(null, ans);
-//		JPanel panel = new JPanel();
-//        panel.setPreferredSize(new Dimension(400, 300));
-//        System.out.println(ans);
-//        JLabel label = new JLabel(ans);
-//        panel.add(label);
-//
-//        JOptionPane.showMessageDialog(null, panel, "Loan Status", JOptionPane.INFORMATION_MESSAGE);
-    
-
     }
 }
