@@ -303,31 +303,6 @@ public class LoanApplicationDAOImpl implements LoanApplicationDAO{
 	}
     
     public String rejectApplication(int id) {
-//        try {
-//            // Check if the applicationId exists
-//            PreparedStatement checkStatement = conn.prepareStatement("SELECT COUNT(*) FROM loanapplication WHERE applicationId = ?");
-//            checkStatement.setInt(1, id);
-//            ResultSet rs = checkStatement.executeQuery();
-//            rs.next(); // Move the cursor to the first row
-//            int count = rs.getInt(1);
-//
-//            if (count > 0) {
-//                // Application ID exists, proceed with the update
-//                Statement statement = conn.createStatement();
-//                int result = statement.executeUpdate("UPDATE loanapplication SET applicationstatus = 'rejected' WHERE applicationId=" + id);
-//
-//                ApplicationStatusDAOImpl a = new ApplicationStatusDAOImpl();
-//                a.createApplicationStatus(id);
-//
-//                return "Loan rejected";
-//            } else {
-//                // Application ID does not exist
-//                return "Application ID " + id + " does not exist.";
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return "An error occurred while rejecting the loan.";
-//        }
     	String s = null;
 		try {
 			Statement statement = conn.createStatement();
@@ -364,11 +339,11 @@ public class LoanApplicationDAOImpl implements LoanApplicationDAO{
 			while(result.next())
 			{
 				ArrayList<String> temp=new ArrayList<>();
-				temp.add(result.getString(1)); //applicationID
-				temp.add(result.getString(10));//monthly income
-				temp.add(result.getString(11));//loan amount
-				temp.add(result.getString(12));//tenure
-				temp.add(result.getString(14));//applicationstatus;
+				temp.add(result.getString(1)); 
+				temp.add(result.getString(10));
+				temp.add(result.getString(11));
+				temp.add(result.getString(12));
+				temp.add(result.getString(14));
 				arr.add(temp);
 			}
 		}

@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 public class CreateDatabase {
     public static void main(String[] args) {
-        // Load the driver
         try {
             System.out.println("Registering driver...");
             DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
@@ -16,9 +15,8 @@ public class CreateDatabase {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/homeloan", "root", "MySQL");
             System.out.println("Connected to the DB: " + conn);
 
-            conn.setAutoCommit(false);  // Transaction management started
+            conn.setAutoCommit(false);  
 
-            // Create User table
             PreparedStatement userTable = conn.prepareStatement("CREATE TABLE User (" +
                     "customerId INT PRIMARY KEY AUTO_INCREMENT," +
                     "password VARCHAR(255)," +
@@ -30,7 +28,6 @@ public class CreateDatabase {
                     "lname VARCHAR(255)" +
                     ");");
 
-            // Create PersonalDetails table
             PreparedStatement personalDetailsTable = conn.prepareStatement("CREATE TABLE PersonalDetails (" +
                     "customerId INT PRIMARY KEY," +
                     "name VARCHAR(255)," +
@@ -45,7 +42,6 @@ public class CreateDatabase {
                     "FOREIGN KEY (customerId) REFERENCES User(customerId)" +
                     ");");
 
-            // Create LoanApplication table
             PreparedStatement createLoanApplication = conn.prepareStatement("CREATE TABLE LoanApplication (" +
                     "applicationId INT PRIMARY KEY AUTO_INCREMENT," +
                     "customerId INT," +
@@ -66,7 +62,7 @@ public class CreateDatabase {
                     "FOREIGN KEY (customerId) REFERENCES User(customerId)" +
                     ");");
 
-            // Create ApplicationStatus table
+           
             PreparedStatement createApplicationStatusTable = conn.prepareStatement("CREATE TABLE ApplicationStatus (" +
                     "applicationId INT PRIMARY KEY," +
                     "customerId INT," +
@@ -79,7 +75,6 @@ public class CreateDatabase {
                     "FOREIGN KEY (customerId) REFERENCES User(customerId)" +
                     ");");
 
-            // Create Documents table
             PreparedStatement createDocumentsTable = conn.prepareStatement("CREATE TABLE Documents (" +
                     "customerId INT PRIMARY KEY," +
                     "panCard BOOLEAN DEFAULT FALSE," +
@@ -91,7 +86,6 @@ public class CreateDatabase {
                     "FOREIGN KEY (customerId) REFERENCES User(customerId)" +
                     ");");
 
-            // Execute all table creation statements
             userTable.execute();
             personalDetailsTable.execute();
             createLoanApplication.execute();
@@ -101,7 +95,6 @@ public class CreateDatabase {
             conn.commit();
             System.out.println("Tables created successfully!");
 
-            // Close resources
             userTable.close();
             personalDetailsTable.close();
             createLoanApplication.close();

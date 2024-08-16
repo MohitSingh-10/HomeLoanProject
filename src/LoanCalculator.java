@@ -58,7 +58,6 @@ public class LoanCalculator {
         }
     }
 
-    // Methods for calculations
     public static double calculateEligibility(double netMonthlySalary) {
         return 60 * (0.6 * netMonthlySalary);
     }

@@ -20,7 +20,6 @@ public class LoginRegister {
             showLoginDialog();
         } else if (choice == 1) {
             showRegisterDialog();
-            // Add functionality for registering
         }
     }
 
@@ -47,11 +46,8 @@ public class LoginRegister {
     
 
     private static void login(String customerId, String password) {
-        // Placeholder for login validation
-        //JOptionPane.showMessageDialog(null, "Logged in successfully with Customer ID: " + customerId, "Login", JOptionPane.INFORMATION_MESSAGE);
     	UserDAOImpl user=new UserDAOImpl();
     	String ans=user.login(Integer.parseInt(customerId),password);
-        // Update the main panel to reflect the login
     	if(ans.equals("No user exists with the given customer Id")) {
     		JOptionPane.showMessageDialog(null,"No user exists with the given customer Id", "login", JOptionPane.INFORMATION_MESSAGE);
     	}
@@ -82,7 +78,7 @@ public class LoginRegister {
         JTextField emailField = new JTextField();
         JTextField phoneNumberField = new JTextField();
         JPasswordField passwordField = new JPasswordField();
-        JPasswordField confirmPasswordField = new JPasswordField(); // For confirming password
+        JPasswordField confirmPasswordField = new JPasswordField(); 
 
         panel.add(new JLabel("First Name:"));
         panel.add(firstNameField);
@@ -119,12 +115,7 @@ public class LoginRegister {
     }
 
     private static void register(String fName, String mName, String lName, String email, String phoneNumber, String password) {
-        // Handle registration logic here
-//        System.out.println("Registration Details:");
-//        System.out.println("Name: " + name);
-//        System.out.println("Email: " + email);
-//        System.out.println("Phone Number: " + phoneNumber);
-//        System.out.println("Password: " + password);
+
         
         User user=new User();
 		user.setAdmin(0);
@@ -138,7 +129,6 @@ public class LoginRegister {
 		useri.createUser(user);
 		int id = useri.getId();
 		
-//		int id = user.getCustomerId();
 		JOptionPane.showMessageDialog(null, "Your Customer ID : "+id);
     }
     

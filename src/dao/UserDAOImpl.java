@@ -37,7 +37,6 @@ public class UserDAOImpl implements UserDAO
 			System.out.println(rows+" Record(s) inserted : ");
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -94,18 +93,6 @@ public class UserDAOImpl implements UserDAO
 	public String getName(int id)
 	 {
 		 try {
-//			 	
-//				Statement statement = conn.createStatement();
-//				ResultSet fname=statement.executeQuery("SELECT fname FROM user where customerId="+id);
-//				ResultSet mname=statement.executeQuery("SELECT mname FROM user where customerId="+id);
-//				ResultSet lname=statement.executeQuery("SELECT lname FROM user where customerId="+id);	
-//				System.out.println(fname);
-//				fname.next();
-//				mname.next();
-//				lname.next();
-//				System.out.println(fname.getString(1));
-//				return fname.getString(1)+" "+mname.getString(1)+" "+lname.getString(1);
-//				return fname.getString(1);
 			 
 			 Statement statement = conn.createStatement();
 			 ResultSet rs = statement.executeQuery("SELECT fname, mname, lname FROM user WHERE customerId=" + id);

@@ -13,19 +13,15 @@ import dao.PersonalDetails;
 import dao.PersonalDetailsDAOImpl;
 public class ApplyLoan{
 	
-//	private static int generateApplicationId() {
-//		// Example: Generate application ID using timestamp
-//		return (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
-//	}
+
 	private static java.sql.Date parseDate(String dateString) {
 	    try {
-	        // Adjust the date format as per your input format
 	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	        java.util.Date utilDate = sdf.parse(dateString);
 	        return new java.sql.Date(utilDate.getTime());
 	    } catch (ParseException e) {
 	        e.printStackTrace();
-	        return null; // Handle appropriately in production code
+	        return null; 
 	    }
 	}
 	
@@ -34,7 +30,6 @@ public class ApplyLoan{
 		
 			boolean exists = persona.alreadyExisting(Globals.custId);
 			exists=!exists;
-			// Income Details Fields
 		    String[] employmentTypes = { "Salaried", "Self-Employed", "Freelancer", "Retired", "Unemployed" };
 		    JComboBox<String> employmentTypeDropdown = new JComboBox<>(employmentTypes);
 		    JTextField organizationField = new JTextField();
@@ -43,9 +38,7 @@ public class ApplyLoan{
 		    JTextField retirementAgeField = new JTextField();
 		    
 		    
-	 
-		    // Loan Details Fields
-//		    JTextField applicationIdField = new JTextField();
+	
 		    JTextField loanAmountField = new JTextField();
 		    JTextField tenureField = new JTextField();
 		    JTextField rateOfInterestField = new JTextField();
@@ -55,7 +48,6 @@ public class ApplyLoan{
 		    JTextField applicationStatusField = new JTextField();
 		    JTextField submissionDateField = new JTextField();
 	 
-		    // Personal Details Fields
 		    JTextField customerIdField = new JTextField();
 		    JTextField nameField = new JTextField();
 		    JTextField emailIdField = new JTextField();
@@ -68,12 +60,10 @@ public class ApplyLoan{
 		    JComboBox<String> genderDropdown = new JComboBox<>(genderTypes);
 		    JTextField nationalityField = new JTextField();
 	 
-		    // Property details fields
 		    JTextField propertyNameField = new JTextField();
 		    JTextField propertyLocationField = new JTextField();
 		    JTextField estimatedCostField = new JTextField();
 	 
-		    // Document Uploads Fields
 		    JButton nocFromBuilderButton = new JButton("Upload");
 		    JLabel nocFromBuilderLabel = new JLabel("NOC from Builder: Not Uploaded");
 		    JButton loaButton = new JButton("Upload");
@@ -86,22 +76,18 @@ public class ApplyLoan{
 		    JLabel salarySlipLabel = new JLabel("Salary Slip: Not Uploaded");
 		    JButton agreementToSaleButton = new JButton("Upload");
 		    JLabel agreementToSaleLabel = new JLabel("Agreement to Sale: Not Uploaded");
-		 // Submit Button
 		    JButton submitButton = new JButton("Submit");
 	 
-		 // Calculate Button
 		    JButton calculateButton = new JButton("Calculate Max Loan Amount & EMI");
 	 
-		    // JFrame and main panel setup
 		    JFrame frame = new JFrame("Loan Application Form");
 	 
-		    frame.setSize(900, 700); // Adjust the size as needed
+		    frame.setSize(900, 700); 
 	 
 		    JPanel panel = new JPanel(new GridBagLayout());
 		    GridBagConstraints gbc = new GridBagConstraints();
-		    gbc.insets = new Insets(5, 5, 5, 5); // Add padding
+		    gbc.insets = new Insets(5, 5, 5, 5); 
 	 
-		    // Income Details Section
 		    JPanel incomeDetailsPanel = new JPanel(new GridLayout(6, 2, 10, 10));
 		    incomeDetailsPanel.setBorder(BorderFactory.createTitledBorder("Income Details"));
 		    incomeDetailsPanel.add(new JLabel("Employment Type:"));
@@ -115,7 +101,6 @@ public class ApplyLoan{
 		    incomeDetailsPanel.add(new JLabel("Retirement Age:"));
 		    incomeDetailsPanel.add(retirementAgeField);
 	 
-		    // Property panel
 		    JPanel propertyPanel = new JPanel(new GridLayout(0, 2, 10, 10));
 		    propertyPanel.setBorder(BorderFactory.createTitledBorder("Property Details"));
 		    propertyPanel.add(new JLabel("Property Name:"));
@@ -127,14 +112,9 @@ public class ApplyLoan{
 		    propertyPanel.add(new JLabel("Estimated Cost:"));
 		    propertyPanel.add(estimatedCostField);
 	 
-		    // Loan Details Section
 		    JPanel loanDetailsPanel = new JPanel(new GridLayout(7, 2, 10, 10));
 		    loanDetailsPanel.setBorder(BorderFactory.createTitledBorder("Loan Details"));
-//		    loanDetailsPanel.add(new JLabel("Application ID:"));
-//		    int appId = generateApplicationId();
-//		    applicationIdField.setText(String.valueOf(appId));
-//		    applicationIdField.setEditable(false);
-//		    loanDetailsPanel.add(applicationIdField);
+
 		    loanDetailsPanel.add(new JLabel("Loan Amount:"));
 		    loanDetailsPanel.add(loanAmountField);
 		    loanDetailsPanel.add(new JLabel("Tenure:"));
@@ -164,7 +144,6 @@ public class ApplyLoan{
 		    calculate.add(calculateButton);
 		    
 		    JPanel personalDetailsPanel = new JPanel(new GridLayout(10, 2));
-		    // Personal Details Section
 		    if(exists) {
 		    		personalDetailsPanel = new JPanel(new GridLayout(10, 2, 10, 10));
 		    
@@ -193,10 +172,6 @@ public class ApplyLoan{
 				    personalDetailsPanel.add(nationalityField);
 		    }
 		   
-//	 
-	 
-	 
-		    // Document Uploads Section
 		    JPanel documentsPanel = new JPanel(new GridLayout(6, 2, 10, 10));
 		    documentsPanel.setBorder(BorderFactory.createTitledBorder("Document Uploads"));
 		    documentsPanel.add(new JLabel("NOC from Builder:"));
@@ -265,7 +240,6 @@ public class ApplyLoan{
 		    });
 		    documentsPanel.add(agreementToSaleLabel);
 	 
-		    // Combine all sections into the main panel
 		    gbc.gridx = 0;
 		    gbc.gridy = 0;
 		    panel.add(incomeDetailsPanel, gbc);
@@ -289,7 +263,6 @@ public class ApplyLoan{
 		    gbc.anchor = GridBagConstraints.CENTER;
 		    panel.add(submitButton, gbc);
 	 
-		 // Add action listener to calculate button
 		    calculateButton.addActionListener(e -> {
 		        try {
 		            double monthlyIncome = Double.parseDouble(monthlyIncomeField.getText());
@@ -297,7 +270,6 @@ public class ApplyLoan{
 		            int tenure = Integer.parseInt(tenureField.getText());
 		            double interestRate = 8.5;
 	 
-		            // Example calculation logic
 		            double maxLoanAmount = LoanCalculator.calculateEligibility(monthlyIncome); // Simple example
 		            double emi = LoanCalculator.calculateEMI(loanAmount, interestRate, tenure); // Simplified EMI calculation
 	 
@@ -309,18 +281,14 @@ public class ApplyLoan{
 		    });
 	 
 	 
-		    // Scroll pane for the main panel
 		    JScrollPane scrollPane = new JScrollPane(panel);
 		    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	 
-		    // Finalize the frame
 		    frame.add(scrollPane);
 		    frame.setVisible(true);
 	 
 		    submitButton.addActionListener(e -> {
-		        // Collect data from the form
 		        try {
-		            //String customerId = customerIdField.getText();
 		            String employmentType = (String) employmentTypeDropdown.getSelectedItem();
 		            int retirementAge = Integer.parseInt(retirementAgeField.getText());
 		            String organization = organizationField.getText();
@@ -328,17 +296,15 @@ public class ApplyLoan{
 		            double monthlyIncome = Double.parseDouble(monthlyIncomeField.getText());
 		            String location = propertyLocationField.getText();
 		            double estimatedCost = Double.parseDouble(estimatedCostField.getText());
-//		            int applicationId = Integer.parseInt(applicationIdField.getText()); // Should be auto-generated and non-editable
 		            double loanAmount = Double.parseDouble(loanAmountField.getText());
 		            int tenure = Integer.parseInt(tenureField.getText());
 		            double rateOfInterest =Globals.ROI;
-		            String applicationStatus = applicationStatusField.getText(); // Default "Pending"
+		            String applicationStatus = applicationStatusField.getText(); 
 		            String submissionDateString = submissionDateField.getText();
 		            java.sql.Date submissionDate = parseDate(submissionDateString);
 		            double maxLoanAmount = Double.parseDouble(maxLoanAmountField.getText());
 		            double emi = Double.parseDouble(emiField.getText());
 	 
-		            // Personal details
 		            
 		         int customerId = Globals.custId;
 		            	
@@ -373,7 +339,7 @@ public class ApplyLoan{
 		           
 		            }
 		            
-		            // Create LoanApplication object
+
 		            LoanApplication app = new LoanApplication();
 		 
 		            app.setCustomerId(customerId);
@@ -383,7 +349,6 @@ public class ApplyLoan{
 		            app.setEmployerName(employerName);
 		            app.setMonthlyIncome(monthlyIncome);
 		            app.setLocation(location);
-//		            app.setApplicationId(applicationId);
 		            app.setLoanAmount(loanAmount);
 		            app.setTenure(tenure);
 		            app.setRateOfInterest(rateOfInterest);
@@ -391,19 +356,7 @@ public class ApplyLoan{
 		            app.setSubmissionDate(submissionDate);
 		            app.setMaxLoanAmount(maxLoanAmount);
 		            app.setEstimatedCost(estimatedCost);
-		            //app.setEmi(emi);
-	 
-//		            app.setName(name);
-		            //app.setEmailId(emailId);
-		            //app.setAge(age);
-		            //app.setDateOfBirth(dob);
-		            //app.setPanNumber(panNumber);
-		            //app.setAadharNumber(aadharNumber);
-		            //app.setPhoneNumber(phoneNumber);
-		            //app.setGender(gender);
-		            //app.setNationality(nationality);
-	 
-		            // Call DAO to save application
+		          
 		            LoanApplicationDAOImpl loanApp = new LoanApplicationDAOImpl();
 		            loanApp.createApplication(app);
 		            int appId = loanApp.getId();

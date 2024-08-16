@@ -4,7 +4,6 @@ import javax.swing.JTextArea;
 
 public class AboutUs {
 	public static void showAboutUs() {
-        // Create the content for the About Us page
         String aboutUs = "About Us\n\n" +
                          "Welcome to Home Loan Solutions!\n\n" +
                          "At Home Loan Solutions, our mission is to help you achieve your dream of owning a home with ease and confidence. We understand that securing a home loan can be a complex and daunting process, which is why we are dedicated to providing you with clear, straightforward, and personalized financial solutions.\n\n" +
@@ -29,17 +28,14 @@ public class AboutUs {
                          "- Address: [Your Office Address]\n\n" +
                          "Thank you for choosing Home Loan Solutions. We look forward to helping you find the perfect home loan for your needs.";
 
-        // Create a JTextArea to display the content
-        JTextArea textArea = new JTextArea(20, 50); // 20 rows, 50 columns
+        JTextArea textArea = new JTextArea(20, 50); 
         textArea.setText(aboutUs);
         textArea.setEditable(false);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
 
-        // Put the JTextArea in a JScrollPane
         JScrollPane scrollPane = new JScrollPane(textArea);
 
-        // Create and display the dialog
         JOptionPane.showMessageDialog(null, scrollPane, "About Us", JOptionPane.INFORMATION_MESSAGE);
     }
 }

@@ -25,25 +25,7 @@ public class ApplicationStatusDAOImpl implements ApplicationStatusDAO{
 		}
 			
 	}
-//	@Override
-//	public void createApplicationStatus(ApplicationStatus applicationStatus) {
-//		try {
-//			PreparedStatement pst = conn.prepareStatement("insert into applicationstatus values (?,?,?,?,?,?,?)");
-//			pst.setInt(1,applicationStatus.getApplicationId());
-//			pst.setInt(2, applicationStatus.getCustomerId());
-//			pst.setDouble(3,applicationStatus.getLoanAmount());
-//			pst.setDouble(4,applicationStatus.getInterestRate());
-//			pst.setString(5,applicationStatus.getStartDate());
-//			pst.setString(6,applicationStatus.getEndDate());
-//			pst.setDouble(7,applicationStatus.getEmi());
-//			int rows = pst.executeUpdate();
-//			System.out.println(rows+" Record(s) inserted : ");
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//	}
+
 	
 	public void createApplicationStatus(int appId) {
 		try {
@@ -126,7 +108,6 @@ public class ApplicationStatusDAOImpl implements ApplicationStatusDAO{
 			}
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return ans;

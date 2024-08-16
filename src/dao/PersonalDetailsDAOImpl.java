@@ -49,7 +49,6 @@ Connection conn=null;
 			int rows = pst.executeUpdate();
 			System.out.println(rows+" Record(s) inserted : ");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
